@@ -1,3 +1,6 @@
+"use client";
+import { useState } from "react";
+
 type DataProps = {
   id: number;
   title: string;
@@ -18,37 +21,80 @@ const data: DataProps[] = [
 ];
 
 export default function Home() {
+  const [Tasks, setTasks] = useState(data);
+  const [input, setInput] = useState("");
+
+  const handleAddNewTask = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!input) return;
+    const newTask: DataProps = {
+      id: Tasks.length + 1,
+      title: input,
+      done: false,
+    };
+
+    setTasks([...Tasks, newTask]);
+
+    setInput("");
+  };
+
+  const handleDeleteTask = (id: number) => {
+    const newTasks = Tasks.filter((task) => task.id !== id);
+    setTasks(newTasks);
+  };
+
+  const handleDoneTask = (id: number) => {
+    const newTasks = Tasks.map((task) => {
+      if (task.id === id) {
+        return { ...task, done: true };
+      }
+      return task;
+    });
+    setTasks(newTasks);
+  };
+
   return (
-    <main className="bg-sky-500 h-screen flex justify-center pt-5 items-start">
+    <main className="bg-sky-500 min-h-screen flex justify-center pt-5 items-start">
       <div className="w-[30rem] bg-white rounded-lg p-5 flex flex-col">
         <div className="pb-5">
-          <h1 className="text-xl font-bold">Do zrobienia</h1>
+          <h1 className="text-2xl font-bold">Do zrobienia</h1>
           <p className="text-lg font-semibold">
-            <span>2</span> zadania
+            <span>{Tasks.length}</span> zadania
           </p>
         </div>
-        <div>
-          <form className="flex gap-2">
-            <input
-              className="flex-1 border-2 border-black rounded-md"
-              type="text"
-            />
-            <button className="border-2 border-sky-500 text-sky-500 py-1 px-2 rounded-md">
-              Dodaj
-            </button>
-          </form>
-        </div>
+        <form className="flex gap-2" onSubmit={handleAddNewTask}>
+          <input
+            className="flex-1 border-2 border-black rounded-md"
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+          />
+          <button
+            className="border-2 border-sky-500 text-sky-500 py-1 px-2 rounded-md"
+            type="submit"
+          >
+            Dodaj
+          </button>
+        </form>
         <ul>
-          {data.map((task) => (
+          {Tasks.map((task) => (
             <li key={task.id} className="flex flex-col">
               <div className="h-[1px] w-full bg-black my-4"></div>
               <div className="flex justify-between items-center">
                 <p className={task.done ? "line-through" : ""}>{task.title}</p>
                 <div className="flex gap-2">
-                  <button className="border-2 border-sky-500 text-sky-500 py-1 px-2 rounded-md">
-                    Zrobione
-                  </button>
-                  <button className="border-2 border-sky-500 text-sky-500 py-1 px-2 rounded-md">
+                  {!task.done && (
+                    <button
+                      className="border-2 border-sky-500 text-sky-500 py-1 px-2 rounded-md"
+                      onClick={() => handleDoneTask(task.id)}
+                    >
+                      Zrobione
+                    </button>
+                  )}
+                  <button
+                    className="border-2 border-sky-500 text-sky-500 py-1 px-2 rounded-md"
+                    onClick={() => handleDeleteTask(task.id)}
+                  >
                     Usuń
                   </button>
                 </div>
