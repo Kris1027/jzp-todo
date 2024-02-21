@@ -58,9 +58,14 @@ export default function Home() {
       <div className="w-[30rem] bg-white rounded-lg p-5 flex flex-col">
         <div className="pb-5">
           <h1 className="text-2xl font-bold">Do zrobienia</h1>
-          <p className="text-lg font-semibold">
-            <span>{Tasks.length}</span> zadania
-          </p>
+          {Tasks.length === 0 ? (
+            ""
+          ) : (
+            <p className="text-lg font-semibold">
+              <span>{Tasks.length}</span> zadani
+              <span>{Tasks.length === 1 ? "e" : "a"}</span>
+            </p>
+          )}
         </div>
         <form className="flex gap-2" onSubmit={handleAddNewTask}>
           <input
