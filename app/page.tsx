@@ -64,22 +64,22 @@ export default function Home() {
           <div>
             <h1 className="text-2xl font-bold">
               {doneTasks.length === 0
-                ? "Nie masz nic do roboty"
+                ? "Brak zadań do zrobienia!"
                 : "Do zrobienia"}
             </h1>
             {doneTasks.length === 0 ? (
               ""
             ) : (
               <p className="text-lg font-semibold">
-                <span>{doneTasks.length}</span> zadani
-                <span>{doneTasks.length === 1 ? "e" : "a"}</span>
+                <span>{doneTasks.length}</span>{" "}
+                <span>{doneTasks.length === 1 ? "zadanie" : "zadania"}</span>
               </p>
             )}
           </div>
           <div>
             {showInput && (
               <button
-                className="py-4 px-6 bg-sky-500 text-white font-bold rounded-full"
+                className="py-4 px-6 bg-sky-500 text-white font-bold rounded-full hover:bg-white hover:text-sky-500 border-2 hover:border-sky-500"
                 onClick={() => setShowInput((prev: boolean) => !prev)}
               >
                 +
@@ -112,14 +112,14 @@ export default function Home() {
                 <div className="flex gap-2">
                   {!task.done && (
                     <button
-                      className="border-2 border-sky-500 text-sky-500 py-1 px-2 rounded-md"
+                      className="border-2 border-sky-500 text-sky-500 hover:bg-sky-500 hover:text-white py-1 px-2 rounded-md"
                       onClick={() => handleDoneTask(task.id)}
                     >
                       Zrobione
                     </button>
                   )}
                   <button
-                    className="border-2 border-sky-500 text-sky-500 py-1 px-2 rounded-md"
+                    className="border-2 border-sky-500 text-sky-500 hover:bg-sky-500 hover:text-white py-1 px-2 rounded-md"
                     onClick={() => handleDeleteTask(task.id)}
                   >
                     Usuń
