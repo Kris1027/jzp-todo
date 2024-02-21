@@ -62,7 +62,11 @@ export default function Home() {
       <div className="w-[30rem] bg-white rounded-lg p-5 flex flex-col">
         <div className="pb-5 flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold">Do zrobienia</h1>
+            <h1 className="text-2xl font-bold">
+              {doneTasks.length === 0
+                ? "Nie masz nic do roboty"
+                : "Do zrobienia"}
+            </h1>
             {doneTasks.length === 0 ? (
               ""
             ) : (
