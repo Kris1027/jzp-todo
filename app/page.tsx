@@ -1,3 +1,22 @@
+type DataProps = {
+  id: number;
+  title: string;
+  done: boolean;
+};
+
+const data: DataProps[] = [
+  {
+    id: 1,
+    title: "Zapłać rachunki",
+    done: false,
+  },
+  {
+    id: 2,
+    title: "Wyrzucić śmieci",
+    done: true,
+  },
+];
+
 export default function Home() {
   return (
     <main className="bg-sky-500 h-screen flex justify-center pt-5 items-start">
@@ -20,20 +39,22 @@ export default function Home() {
           </form>
         </div>
         <ul>
-          <li className="flex flex-col">
-            <div className="h-[1px] w-full bg-black my-4"></div>
-            <div className="flex justify-between items-center">
-              <p>Zapłać rachunki</p>
-              <div className="flex gap-2">
-                <button className="border-2 border-sky-500 text-sky-500 py-1 px-2 rounded-md">
-                  Zrobione
-                </button>
-                <button className="border-2 border-sky-500 text-sky-500 py-1 px-2 rounded-md">
-                  Usuń
-                </button>
+          {data.map((task) => (
+            <li key={task.id} className="flex flex-col">
+              <div className="h-[1px] w-full bg-black my-4"></div>
+              <div className="flex justify-between items-center">
+                <p className={task.done ? "line-through" : ""}>{task.title}</p>
+                <div className="flex gap-2">
+                  <button className="border-2 border-sky-500 text-sky-500 py-1 px-2 rounded-md">
+                    Zrobione
+                  </button>
+                  <button className="border-2 border-sky-500 text-sky-500 py-1 px-2 rounded-md">
+                    Usuń
+                  </button>
+                </div>
               </div>
-            </div>
-          </li>
+            </li>
+          ))}
         </ul>
       </div>
     </main>
