@@ -37,7 +37,7 @@ export default function Home() {
         done: false,
       },
     ]);
-    setShowInput(false);
+    setShowInput(true);
   };
 
   const handleDeleteTask = (id: number) => {
