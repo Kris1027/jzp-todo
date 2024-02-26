@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
+import TaskItem from "./components/task-item";
 
-type DataProps = {
+export type DataProps = {
   id: number;
   title: string;
   done: boolean;
@@ -117,28 +118,14 @@ export default function Home() {
         )}
         <ul>
           {Tasks.map((task) => (
-            <li key={task.id} className="flex flex-col">
-              <div className="h-[1px] w-full bg-black my-4"></div>
-              <div className="flex justify-between items-center">
-                <p className={task.done ? "line-through" : ""}>{task.title}</p>
-                <div className="flex gap-2">
-                  {!task.done && (
-                    <button
-                      className="border-2 border-sky-500 text-sky-500 hover:bg-sky-500 hover:text-white py-1 px-2 rounded-md"
-                      onClick={() => handleDoneTask(task.id)}
-                    >
-                      Zrobione
-                    </button>
-                  )}
-                  <button
-                    className="border-2 border-sky-500 text-sky-500 hover:bg-sky-500 hover:text-white py-1 px-2 rounded-md"
-                    onClick={() => handleDeleteTask(task.id)}
-                  >
-                    Usuń
-                  </button>
-                </div>
-              </div>
-            </li>
+            <TaskItem
+              key={task.id}
+              id={task.id}
+              title={task.title}
+              done={task.done}
+              isDone={handleDoneTask}
+              onDelete={handleDeleteTask}
+            />
           ))}
         </ul>
       </div>
