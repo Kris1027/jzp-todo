@@ -1,14 +1,21 @@
+import { useState } from "react";
+
 export default function InputForm({
-  input,
-  setInput,
   onAdd,
 }: {
-  input: string;
-  setInput: React.Dispatch<React.SetStateAction<string>>;
-  onAdd: (e: React.FormEvent<HTMLFormElement>) => void;
+  onAdd: (title: string) => void;
 }) {
+  const [input, setInput] = useState<string>("");
+
   return (
-    <form className="flex gap-2" onSubmit={onAdd}>
+    <form
+      className="flex gap-2"
+      onSubmit={(e) => {
+        e.preventDefault();
+        onAdd(input);
+        setInput("");
+      }}
+    >
       <input
         className="flex-1 border-2 border-black rounded-md"
         type="text"

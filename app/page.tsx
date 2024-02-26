@@ -23,40 +23,33 @@ export default function Home() {
       done: true,
     },
   ]);
-  const [input, setInput] = useState("");
   const [showInput, setShowInput] = useState(true);
 
   const doneTasks = Tasks.filter((task) => !task.done);
   const activeTasks = doneTasks.length;
 
-  const handleAddNewTask = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!input) return;
-    const newTask: DataProps = {
-      id: Tasks.length + 1,
-      title: input,
-      done: false,
-    };
-
-    setTasks([...Tasks, newTask]);
-
-    setInput("");
-    setShowInput(true);
+  const handleAddNewTask = (newTask: string) => {
+    setTasks((prevTasks) => [
+      ...prevTasks,
+      {
+        id: Math.random(),
+        title: newTask,
+        done: false,
+      },
+    ]);
+    setShowInput(false);
   };
 
   const handleDeleteTask = (id: number) => {
-    const newTasks = Tasks.filter((task) => task.id !== id);
-    setTasks(newTasks);
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
   };
 
   const handleDoneTask = (id: number) => {
-    const newTasks = Tasks.map((task) => {
-      if (task.id === id) {
-        return { ...task, done: true };
-      }
-      return task;
-    });
-    setTasks(newTasks);
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, done: !task.done } : task
+      )
+    );
   };
 
   return (
@@ -67,13 +60,7 @@ export default function Home() {
           showInput={showInput}
           setShowInput={setShowInput}
         />
-        {!showInput && (
-          <InputForm
-            input={input}
-            setInput={setInput}
-            onAdd={handleAddNewTask}
-          />
-        )}
+        {!showInput && <InputForm onAdd={handleAddNewTask} />}
         <ul>
           {Tasks.map((task) => (
             <TaskItem
