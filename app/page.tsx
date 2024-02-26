@@ -20,6 +20,17 @@ const data: DataProps[] = [
   },
 ];
 
+function HeadingTasksAmount(numberOfTasks: number) {
+  switch (true) {
+    case numberOfTasks === 1:
+      return "zadanie";
+    case numberOfTasks > 1 && numberOfTasks < 5:
+      return "zadania";
+    case numberOfTasks > 4:
+      return "zadań";
+  }
+}
+
 export default function Home() {
   const [Tasks, setTasks] = useState(data);
   const [input, setInput] = useState("");
@@ -56,6 +67,7 @@ export default function Home() {
   };
 
   const doneTasks = Tasks.filter((task) => !task.done);
+  const activeTasks = doneTasks.length;
 
   return (
     <main className="bg-sky-500 min-h-screen flex justify-center pt-5 items-start">
@@ -71,8 +83,8 @@ export default function Home() {
               ""
             ) : (
               <p className="text-lg font-semibold">
-                <span>{doneTasks.length}</span>{" "}
-                <span>{doneTasks.length === 1 ? "zadanie" : "zadania"}</span>
+                <span>{activeTasks}</span>{" "}
+                <span>{HeadingTasksAmount(activeTasks)}</span>
               </p>
             )}
           </div>
