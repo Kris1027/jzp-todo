@@ -29,6 +29,36 @@ export default function Home() {
   const doneTasks = Tasks.filter((task) => !task.done);
   const activeTasks = doneTasks.length;
 
+  const handleAddNewTask = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!input) return;
+    const newTask: DataProps = {
+      id: Tasks.length + 1,
+      title: input,
+      done: false,
+    };
+
+    setTasks([...Tasks, newTask]);
+
+    setInput("");
+    setShowInput(true);
+  };
+
+  const handleDeleteTask = (id: number) => {
+    const newTasks = Tasks.filter((task) => task.id !== id);
+    setTasks(newTasks);
+  };
+
+  const handleDoneTask = (id: number) => {
+    const newTasks = Tasks.map((task) => {
+      if (task.id === id) {
+        return { ...task, done: true };
+      }
+      return task;
+    });
+    setTasks(newTasks);
+  };
+
   return (
     <main className="bg-sky-500 min-h-screen flex justify-center pt-5 items-start">
       <div className="w-[30rem] bg-white rounded-lg p-5 flex flex-col">
@@ -41,9 +71,7 @@ export default function Home() {
           <InputForm
             input={input}
             setInput={setInput}
-            setShowInput={setShowInput}
-            Tasks={Tasks}
-            setTasks={setTasks}
+            onAdd={handleAddNewTask}
           />
         )}
         <ul>
@@ -53,8 +81,8 @@ export default function Home() {
               id={task.id}
               title={task.title}
               done={task.done}
-              Tasks={Tasks}
-              setTasks={setTasks}
+              onDone={handleDoneTask}
+              onDelete={handleDeleteTask}
             />
           ))}
         </ul>
