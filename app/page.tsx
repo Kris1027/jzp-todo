@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useReducer, useState } from "react";
 import TaskItem from "./components/task-item";
 import InputForm from "./components/input-form";
 import Heading from "./components/heading";
@@ -10,47 +10,60 @@ export type DataProps = {
   done: boolean;
 };
 
+const initialState: DataProps[] = [
+  {
+    id: 1,
+    title: "Zapłać rachunki",
+    done: false,
+  },
+  {
+    id: 2,
+    title: "Wyrzucić śmieci",
+    done: true,
+  },
+];
+
+const reducer = (state: DataProps[], action: any) => {
+  switch (action.type) {
+    case "ADD":
+      return [
+        ...state,
+        {
+          id: Math.random(),
+          title: action.title,
+          done: false,
+        },
+      ];
+    case "DELETE":
+      return state.filter((task) => task.id !== action.id);
+    case "DONE":
+      return state.map((task) =>
+        task.id === action.id ? { ...task, done: !task.done } : task
+      );
+    default:
+      return state;
+  }
+};
+
 export default function Home() {
-  const [Tasks, setTasks] = useState<DataProps[]>([
-    {
-      id: 1,
-      title: "Zapłać rachunki",
-      done: false,
-    },
-    {
-      id: 2,
-      title: "Wyrzucić śmieci",
-      done: true,
-    },
-  ]);
-  const [showInput, setShowInput] = useState(true);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
-  const doneTasks = Tasks.filter((task) => !task.done);
-  const activeTasks = doneTasks.length;
-
-  const handleAddNewTask = (newTask: string) => {
-    setTasks((prevTasks) => [
-      ...prevTasks,
-      {
-        id: Math.random(),
-        title: newTask,
-        done: false,
-      },
-    ]);
-    setShowInput(true);
+  const handleAddNewTask = (title: string) => {
+    dispatch({ type: "ADD", title });
   };
 
   const handleDeleteTask = (id: number) => {
-    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+    dispatch({ type: "DELETE", id });
   };
 
   const handleDoneTask = (id: number) => {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === id ? { ...task, done: !task.done } : task
-      )
-    );
+    dispatch({ type: "DONE", id });
   };
+
+  const [showInput, setShowInput] = useState(true);
+
+  const doneTasks = state.filter((task) => !task.done);
+  const activeTasks = doneTasks.length;
 
   return (
     <main className="bg-sky-500 min-h-screen flex justify-center pt-5 items-start">
@@ -62,7 +75,7 @@ export default function Home() {
         />
         {!showInput && <InputForm onAdd={handleAddNewTask} />}
         <ul>
-          {Tasks.map((task) => (
+          {state.map((task) => (
             <TaskItem
               key={task.id}
               id={task.id}
